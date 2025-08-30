@@ -1,6 +1,79 @@
 #set list(marker: [--])
 #let qed = [#math.square]
 
+// https://forum.typst.app/t/how-could-i-automatically-generate-tree-views-collapsible-lists-from-typst-lists/5827/
+#let tree-depth = state("tree-depth", 0)
+
+#show list: it => context {
+  show: html.elem.with("ul", attrs: (:
+    ..if tree-depth.get() == 0 { (class: "tree") }
+  ))
+
+  tree-depth.update(x => x + 1)
+  for elem in it.children {
+    html.elem("li", elem.body)
+  }
+  tree-depth.update(x => x - 1)
+}
+/// returns either a tuple (summary, details) or none
+#let split-summary(body) = {
+  assert.eq(type(body), content)
+  let sequence = [].func()
+
+  // this is a list: no summary
+  if body.func() in (list, list.item) { return (none, body) }
+
+  // if it's not a sequence it can't contain a list
+  // at least not directly – a block containing a list will throw us off!
+  if body.func() not in (sequence,) { return none }
+
+  let index = body.children.position(c => c.func() in (list, list.item))
+  // if no list or item is found, it doesn't contain a list
+  if index == none { return none }
+
+  // split and return the parts
+  let summary = body.children.slice(0, index).join()
+  let body = body.children.slice(index).join()
+  (summary, body)
+}
+#show list: it => context {
+  let top-level = tree-depth.get() == 0
+  show: html.elem.with("ul", attrs: (:
+    ..if top-level { (class: "tree") }
+  ))
+
+  tree-depth.update(x => x + 1)
+  for elem in it.children {
+    let result = split-summary(elem.body)
+    let body = if result == none {
+      // a regular list element if there's no nested list
+      elem.body
+    } else {
+      // a <details> element
+      show: html.elem.with("details", attrs: (:
+        ..if top-level { (open: "true") }
+      ))
+      let (summary, body) = result
+      if summary != none {
+        html.elem("summary", summary)
+      }
+      body
+    }
+    html.elem("li", body)
+  }
+  tree-depth.update(x => x - 1)
+}
+
+#show math.equation.where(block: false): it => {
+  html.elem("span", attrs: (role: "math"), html.frame(it))
+}
+#show math.equation.where(block: true): it => {
+  html.elem("figure", attrs: (role: "math"), html.frame(it))
+}
+#html.elem("style")[
+  ul { list-style-type: "-- "; }
+]
+
 - an undirected graph is $G = (V,E)$, with $V$ the vertices, $E$ the edges. $V = {V_1, V_2, ..., V_n}$ is a set of objects, $E$ a set of connections between the objects s.t. $forall e in E, e = {u,v}$ with $u,v in V$.
 
 - a directed graph differs in its edges $E$, where  $forall e in E, e = (u,v)$ with $u,v in V$.

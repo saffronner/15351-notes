@@ -1,11 +1,6 @@
 #set list(marker: [--])
 #let qed = [#math.square]
-// #show math.equation.where(block: false): it => {
-//   html.elem("span", attrs: (role: "math"), html.frame(it))
-// }
-// #show math.equation.where(block: true): it => {
-//   html.elem("figure", attrs: (role: "math"), html.frame(it))
-// }
+
 - an undirected graph is $G = (V,E)$, with $V$ the vertices, $E$ the edges. $V = {V_1, V_2, ..., V_n}$ is a set of objects, $E$ a set of connections between the objects s.t. $forall e in E, e = {u,v}$ with $u,v in V$.
 
 - a directed graph differs in its edges $E$, where  $forall e in E, e = (u,v)$ with $u,v in V$.

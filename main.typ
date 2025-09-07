@@ -41,16 +41,54 @@
         At any point in the algorithm, $T = (V_T, E_T)$ is a subgraph and a tree. $T$ grows by 1 vertex and 1 edge at each step, stopping at $|V_G| - 1$ steps, and so results in a spanning tree. Since these edges are in the MST from above, the spanning tree is the MST. #qed
 
     - impl
-      - our MST-in-progress will be denoted $T$
 
-      + `O(n)`: define distances to $T$ for all nodes, init to $infinity$
-        - (because no nodes connected to our $T$ that doesn't exist)
-      + `O(1)`: let $u$ be an arbitrary node
-      + `O(1)`: add $u$ to $T$ (let distance to $T$ of $u$ be $-infinity$)
-      + with (5), `O(m)` overall (not in loop calc): $forall v in op(#raw("nbors")) (u),$ if the distance from $v$ to $T$ is closer than our saved distance from $v$ to $T$, update this distance. With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`
-      + set parent of $v$ to $u$ if we did update (why?)
-      + interesting time efficiency: set $u$ to be the closest vertex to $T$
-      + loop `O(n)` times: while $u$ exists, go to (3)
+      - (min) heap ADT
+
+        - interface
+          - `fn new(items) -> Self;`
+          - `fn min() -> Item;`
+          - `fn insert(item);`
+          - `fn delete(item);`
+
+        - heap-ordered-tree (as an array) implementation
+          #figure(
+            caption: [notice the monotonic decreasing upward. Also notice the array implementation, where $op("traverse_left")(i) = 2i$ and $op("traverse_right")(i) = 2i + 1$.],
+            diagram(
+              // debug: true,
+              spacing: 0em, // small column gaps, large row spacing
+              cell-size: (2em, 3em),
+              node-inset: 0em,
+              node((0, 0), [2]),
+              node((1, 1), [8]),
+              node((2, 1), [3]),
+              node((3, 2), [12]),
+              node((4, 2), [9]),
+              node((5, 2), [7]),
+              node((6, 2), [10]),
+              edge((0, 0), (1, 1), "->"),
+              edge((0, 0), (2, 1), "->"),
+              edge((1, 1), (3, 2), "->"),
+              edge((1, 1), (4, 2), "->"),
+              edge((2, 1), (5, 2), "->"),
+              edge((2, 1), (6, 2), "->"),
+            ),
+          )
+          - `new` $in O(n)$; take items as array, for all elements (indices right to left), sift down
+          - `min` $in O(1)$; it's at the top of the tree
+          - `insert` $in O(log n)$; insert as leaf preserving shape (aka dense array), sift up
+          - `delete` $in O(log n)$; swap with leaf, delete, sift swapped down
+
+      - work of Prim's with a heap is $O(m log n)$
+        - our MST-in-progress will be denoted $T$
+
+        + `O(n)`: define distances to $T$ for all nodes, init to $infinity$
+          - (because no nodes connected to our $T$ that doesn't exist)
+        + `O(1)`: let $u$ be an arbitrary node
+        + `O(1)`: add $u$ to $T$ (let distance to $T$ of $u$ be $-infinity$)
+        + with (5), `O(m)` overall (not in loop calc): $forall v in op(#raw("nbors")) (u),$ if the distance from $v$ to $T$ is closer than our saved distance from $v$ to $T$, update this distance. With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`
+        + set parent of $v$ to $u$ if we did update (why?)
+        + interesting time efficiency: set $u$ to be the closest vertex to $T$
+        + loop `O(n)` times: while $u$ exists, go to (3)
 
   - Reverse Delete
 

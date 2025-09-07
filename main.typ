@@ -79,16 +79,13 @@
           - `delete` $in O(log n)$; swap with leaf, delete, sift swapped down
 
       - work of Prim's with a heap is $O(m log n)$
-        - our MST-in-progress will be denoted $T$
+        + $O(n)$; create empty heaparray (for max $n$ items)
+        + $O(1)$; choose arb start node $u$
+        + $O(log n)$ work per heap operation, $O(m)$ times total (because we only nbors the edges that much, trust. see your example); $forall v in op(#raw("nbors")) (u),$ if $v$ is closer to $T$ than our saved distance from $v$ to $T$, update this distance (and also set parent of $v$ to $u$). With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`. TODO parent??
+        + $O(log n)$; set $u$ to closest node to $T$ (min of heap) and delete it
+        + $O(n)$ repetitions; while $u$ exists, go to (3)
 
-        + `O(n)`: define distances to $T$ for all nodes, init to $infinity$
-          - (because no nodes connected to our $T$ that doesn't exist)
-        + `O(1)`: let $u$ be an arbitrary node
-        + `O(1)`: add $u$ to $T$ (let distance to $T$ of $u$ be $-infinity$)
-        + with (5), `O(m)` overall (not in loop calc): $forall v in op(#raw("nbors")) (u),$ if the distance from $v$ to $T$ is closer than our saved distance from $v$ to $T$, update this distance. With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`
-        + set parent of $v$ to $u$ if we did update (why?)
-        + interesting time efficiency: set $u$ to be the closest vertex to $T$
-        + loop `O(n)` times: while $u$ exists, go to (3)
+        - this is $O(m log n + n log n)$ from (3) and repeating (4), which is $in O(m log n)$
 
   - Reverse Delete
 

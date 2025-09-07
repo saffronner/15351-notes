@@ -1,5 +1,6 @@
 #import "@preview/fletcher:0.5.5" as fletcher: diagram, edge, node
 
+#set page(height: auto)
 #set list(marker: [--])
 #let qed = [#math.square]
 
@@ -15,7 +16,7 @@
 
 - a tree is an acyclic connected graph
 
-- greedy algorithm: 
+- greedy algorithm:
   - local optimal decision to try solving a global problem
   - decisions are irrevocable (helpful for easy time complexity proofs)
 
@@ -36,21 +37,21 @@
 
     - proof
       - The pair ("in $T$", "not in $T$") is a cut of $G$. By the Cut Property, the MST contains the lowest cost edge crossing this cut, which is by defn the next edge Prim's adds, i.e. Prim's adds edges in the MST.
-        
+
         At any point in the algorithm, $T = (V_T, E_T)$ is a subgraph and a tree. $T$ grows by 1 vertex and 1 edge at each step, stopping at $|V_G| - 1$ steps, and so results in a spanning tree. Since these edges are in the MST from above, the spanning tree is the MST. #qed
 
     - impl
       - our MST-in-progress will be denoted $T$
 
-      + `O(n)`: define distances to $T$ for all nodes, init to $infinity$ 
+      + `O(n)`: define distances to $T$ for all nodes, init to $infinity$
         - (because no nodes connected to our $T$ that doesn't exist)
       + `O(1)`: let $u$ be an arbitrary node
-      + `O(1)`: add $u$ to $T$ (let distance to $T$ of $u$ be $-infinity$) 
+      + `O(1)`: add $u$ to $T$ (let distance to $T$ of $u$ be $-infinity$)
       + with (5), `O(m)` overall (not in loop calc): $forall v in op(#raw("nbors")) (u),$ if the distance from $v$ to $T$ is closer than our saved distance from $v$ to $T$, update this distance. With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`
       + set parent of $v$ to $u$ if we did update (why?)
       + interesting time efficiency: set $u$ to be the closest vertex to $T$
       + loop `O(n)` times: while $u$ exists, go to (3)
-  
+
   - Reverse Delete
 
     - description

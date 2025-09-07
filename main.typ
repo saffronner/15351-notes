@@ -1,3 +1,5 @@
+#import "@preview/fletcher:0.5.5" as fletcher: diagram, edge, node
+
 #set list(marker: [--])
 #let qed = [#math.square]
 
@@ -73,7 +75,140 @@
       - spanning bc $|V| - 1$ thing and tree
       - minimum: at some step, let $e$ be the next edge added. All rejected edges would have created cycles, and must be the max in the cycle they create by algo defn. This means, by cycle property, it's MST.
 
-  - how do we do some of this stuff _fast_? 
-    - next lecture, looking into adj mat/lists, abstract data types, and specifically the union-find type. (`find(i)` returns `i`'s group, `union(a, b)` coalesces groups `a, b`.)
+    - impl
 
-        
+      - union-find abstract data type (ADT)
+
+        - interface
+          - `fn new(items) -> Self;` splits items into that many sets
+          - `fn find(item) -> Label;` finds the set the item belongs to
+          - `fn union(a, b);` merges two sets
+
+        - array-based implementation
+          #figure(caption: [array-based union-find], diagram(
+            // debug: true,
+            spacing: 0em, // small column gaps, large row spacing
+            cell-size: (2em, 1.5em),
+            node-inset: 0em,
+
+            // index col
+            node((0, 0), [index], width: 3em),
+            node((0, 1), [1]),
+            node((0, 2), [2]),
+            node((0, 3), [3]),
+            node((0, 4), [4]),
+            node((0, 5), [5]),
+            node((0, 6), [6]),
+            node((0, 7), [7]),
+
+            // item lists
+            node((1, 0), [item lists], width: 4em),
+            node((1, 1), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((1, 2), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((1, 3), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((1, 4), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((1, 5), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((1, 6), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((1, 7), $$, stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+
+            edge((1, 1), (2, 1), "-|>", snap-to: (none, auto)),
+            edge((1, 3), (2, 3), "-|>", snap-to: (none, auto)),
+            edge((1, 4), (2, 4), "-|>", snap-to: (none, auto)),
+            edge((1, 7), (2, 7), "-|>", snap-to: (none, auto)),
+
+            node((2, 1), [1]),
+            node((2, 3), [3]),
+            node((2, 4), [4]),
+            node((2, 7), [7]),
+
+            edge((2, 1), (3, 1), "-|>"),
+            edge((2, 3), (3, 3), "-|>"),
+
+            node((3, 1), [5]),
+            node((3, 3), [2]),
+
+            edge((3, 1), (4, 1), "-|>"),
+
+            node((4, 1), [6]),
+
+            // size lists
+
+            node((5, 0), [size], width: 4em),
+            node((5, 1), [3], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((5, 2), [], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((5, 3), [2], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((5, 4), [1], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((5, 5), [], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((5, 6), [], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((5, 7), [1], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+
+            // set label lists
+
+            node((6, 0), [set], width: 4em),
+            node((6, 1), [1], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((6, 2), [3], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((6, 3), [3], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((6, 4), [4], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((6, 5), [1], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((6, 6), [1], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+            node((6, 7), [7], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
+          ))
+          - `new` $in O(n)$; creates the three lists
+          - `find` $in O(1)$; size array lookup
+          - `union` $in O(log n)$ amortized;
+            - procedure
+              + find smaller set ($x<=y$)
+              + for each $x_i$, make `set[elem]` be $y$
+              + update sizes array
+              + prepend smaller to larger list
+            - proof
+              - (2) is computation. others $O(1)$
+              - after $k$ unions, $<= 2k$ items touched
+              - for any item $v$, `set[v]` is relabeled $<= log_2 2k$ times (TODO WTF WHY) ($2k$ is the \# of items in the largest set????)
+              - $2k log_2 2k in O(k log k)$ work
+
+        - tree-based implementation
+          #figure(caption: [tree-based union-find.], diagram(
+            // debug: true,
+            spacing: 0em, // small column gaps, large row spacing
+            cell-size: (2em, 2em),
+            node-inset: 0em,
+            node((1, 0), [1]),
+            node((1, 1), [3]),
+            node((0, 1), [10]),
+            node((2, 1), [4]),
+            node((4, 0), [9]),
+            node((4, 1), [2]),
+            node((5, 1), [6]),
+            node((6, 0), [5]),
+            node((8, 0), [7]),
+            node((8, 1), [8]),
+            edge((0, 1), (1, 0), "-|>"),
+            edge((1, 1), (1, 0), "-|>"),
+            edge((2, 1), (1, 0), "-|>"),
+            edge((4, 1), (4, 0), "-|>"),
+            edge((5, 1), (4, 0), "-|>"),
+            edge((8, 1), (8, 0), "-|>"),
+          ))
+          - `new` $in O(n)$
+            - let `struct Node { parent: Option<&Node>, height: uint }`
+            - create an array of node addresses, so we can get from a node id to its node in $O(1)$
+            - create all singleton nodes
+          - `find` $in O(log n)$; follow ptrs to the root, which is the set label
+            - proof
+              - set at $i$ is renamed at most $log_2 n$ times because each renaming doubles size
+              - depth of tree is number of renamings
+          - `union` $in O(1)$ (amortized?); move pointer, update height. is this really all we do?
+
+      - work of Kruskal's for array-based union-find is $O(m log n)$
+        - sorting edges $in O(m log m) in O(m log n)$
+        - because $m <= n^2$, so $log m <= log n^2 = 2 log n$
+        - at most $2m$ `find` operations $in O(2m)$ (to check if edge would create cycle)
+        - at most $n-1$ `union` ops in $O(n log n)$
+        - total runtime $in O(m log n + 2m + n log n) in O(m log n)$
+
+      - work of Kruskal's for tree-based union-find is also $O(m log n)$
+        - sorting edges $in O(m log n)$ from above
+        - at most $2m$ `find` ops $in O(2m log n)$
+        - at most $n - 1$ union ops $in O(n)$
+        - total runtime $in O(m log n + 2m log n + n) in O(m log n)$

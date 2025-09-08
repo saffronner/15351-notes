@@ -248,3 +248,75 @@
         - at most $2m$ `find` ops $in O(2m log n)$
         - at most $n - 1$ union ops $in O(n)$
         - total runtime $in O(m log n + 2m log n + n) in O(m log n)$
+
+- graph traversal problem: suppose a graph $G = (V, E)$. Find a path from a node $s$ to $t$ if it exists.
+  - depth-first search
+    #figure(caption: [depth-first search], diagram(
+      // https://quiver.theophile.me/#r=typst&q=WzAsOCxbMCwwLCIxIl0sWzAsMSwiMiJdLFswLDIsIjMiXSxbMCwzLCI1Il0sWzAsNCwiNCJdLFsxLDQsIjYiXSxbMSwzLCI3Il0sWzIsNCwiOCJdLFswLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDQsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw1LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsNiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDcsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwyLCIiLDAseyJjdXJ2ZSI6LTMsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsxLDMsIiIsMCx7ImN1cnZlIjozLCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDQsIiIsMCx7ImN1cnZlIjo0LCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDcsIiIsMCx7ImN1cnZlIjotMywic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+      spacing: 1em,
+      node((0, 0), [$1$]),
+      node((0, 1), [$2$]),
+      node((0, 2), [$3$]),
+      node((0, 3), [$5$]),
+      node((0, 4), [$4$]),
+      node((1, 4), [$6$]),
+      node((1, 3), [$7$]),
+      node((2, 4), [$8$]),
+      edge((0, 0), (0, 1)),
+      edge((0, 1), (0, 2)),
+      edge((0, 2), (0, 3)),
+      edge((0, 3), (0, 4)),
+      edge((0, 3), (1, 4)),
+      edge((0, 2), (1, 3)),
+      edge((1, 3), (2, 4)),
+      edge((0, 0), (0, 2), "..", bend: 54deg),
+      edge((0, 1), (0, 3), "..", bend: -54deg),
+      edge((0, 1), (0, 4), "..", bend: -72deg),
+      edge((0, 2), (2, 4), "..", bend: 54deg),
+    ))
+
+    - theorem: adjacent edges are not on the same level. That is, if $(x,y) in E$, $x$ is either an ancestor or descendant of $y$.
+      - proof: WLOG, let $x$ ancestor of $y$. When we pass $x$, we haven't seen $y$. All nodes between initially seeing $x$ and leaving $x$ are decendants of $x$. So, $y$ must have been explored before leaving $x$, as a descendant.
+
+  - breadth-first search
+    #figure(caption: [breadth-first search], diagram(
+      // https://quiver.theophile.me/#r=typst&q=WzAsOCxbMSwwLCIxIl0sWzEsMSwiMiJdLFsyLDEsIjMiXSxbMCwyLCI0Il0sWzEsMiwiNSJdLFsxLDMsIjYiXSxbMiwyLCI3Il0sWzMsMiwiOCJdLFswLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDcsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw0LCIiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDIsIiIsMCx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMSwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+      spacing: 1em,
+      node((0.5, 0), [$1$]),
+      node((0, 1), [$2$]),
+      node((1, 1), [$3$]),
+      node((-1, 2), [$4$]),
+      node((0, 2), [$5$]),
+      node((0, 3), [$6$]),
+      node((1, 2), [$7$]),
+      node((2, 2), [$8$]),
+      edge((0.5, 0), (0, 1)),
+      edge((0, 1), (-1, 2)),
+      edge((0.5, 0), (1, 1)),
+      edge((1, 1), (2, 2)),
+      edge((1, 1), (1, 2)),
+      edge((0, 1), (0, 2)),
+      edge((0, 2), (0, 3)),
+      edge((-1, 2), (0, 2), ".."),
+      edge((0, 2), (1, 1), ".."),
+      edge((1, 1), (0, 1), ".."),
+      edge((1, 2), (2, 2), ".."),
+    ))
+
+    - theorem: adjacent edges are near the same level. That is, if $(x,y) in E$, then $|op("layer")(x) - op("layer")(y)| <= 1$
+      - proof: 1) WLOG, AFSOC that $op("layer")(x) < op("layer")(y) - 1$. 2) All nbors of $x$ are added in or before $op("layer")(x) + 1$. By 2, $op("layer")(y) <= op("layer")(x) + 1$. But by 1, $op("layer")(y) > op("layer")(x) + 1$. $-><-$.
+
+  - these (and Prim's!) are specifc types of tree-growing algorithms
+    ```
+    TreeGrowingAlg(graph G, initial node v, fn findnext)
+        T = ({v}, {})
+        S = set of nodes adj to v
+        while S has items,
+            e = nextEdge(G, S)
+            T = T + e
+            S = updateFrontier(G, S, e)
+    ```
+    - `next`/`update` is pop/push for DFS and de/enqueue for BFS, $O(m)$ across entire program.
+      - same logic as Prim's
+    - everything else in $O(n)$ (including loop)
+    - thus, DFS and BFS are $in O(n + m)$

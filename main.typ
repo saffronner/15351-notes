@@ -206,9 +206,7 @@
         - tree-based implementation
           #figure(caption: [tree-based union-find.], diagram(
             // debug: true,
-            spacing: 0em, // small column gaps, large row spacing
-            cell-size: (2em, 2em),
-            node-inset: 0em,
+            spacing: 1em,
             node((1, 0), [1]),
             node((1, 1), [3]),
             node((0, 1), [10]),

@@ -318,3 +318,57 @@
       - same logic as Prim's
     - everything else in $O(n)$ (including loop)
     - thus, DFS and BFS are $in O(n + m)$
+
+  - is-bipartite problem
+
+    - definition: a graph is bipartite if $exists$ a two-coloring. that is, if you can divide the nodes into two colors s.t. all edges connect nodes of diff colors.
+
+      #grid(
+        columns: (1fr, 1fr),
+        align: bottom,
+        figure(caption: [a bipartite graph], diagram(
+          spacing: 1em,
+          node-stroke: black,
+          {
+            node((0, 0), [$1$], name: <1>, shape: rect)
+            node((1, 0), [$2$], name: <2>)
+            node((0, 1), [$3$], name: <3>, shape: rect)
+            node((1, 1), [$4$], name: <4>)
+            node((0, 2), [$5$], name: <5>, shape: rect)
+            node((1, 2), [$6$], name: <6>)
+            node((0, 3), [$7$], name: <7>, shape: rect)
+            node((1, 3), [$8$], name: <8>)
+            edge(<1>, <2>)
+            edge(<1>, <4>)
+            edge(<3>, <2>)
+            edge(<3>, <4>)
+            edge(<5>, <4>)
+            edge(<7>, <6>)
+            edge(<7>, <8>)
+          },
+        )),
+
+        figure(caption: [can't have odd cycles], diagram(
+          spacing: 1em,
+          node-stroke: black,
+          {
+            node((0, 0), stroke: none, name: <origin>)
+            node((72 * 1deg, 4em), [$1$], name: <1>, shape: rect)
+            node((72 * 2deg, 4em), [$2$], name: <2>)
+            node((72 * 3deg, 4em), [$3$], name: <3>, shape: rect)
+            node((72 * 4deg, 4em), [$4$], name: <4>)
+            node((72 * 5deg, 4em), [$5$ ?], name: <5>, stroke: none)
+            edge(<1>, <5>)
+            edge(<2>, <1>)
+            edge(<3>, <2>)
+            edge(<4>, <3>)
+            edge(<5>, <4>)
+          },
+       )),
+      )
+
+    - solution: do a BFS from any node, swapping colors per layer. check if any edge is monolayer (since edges are between adj layers or same layer)
+
+      - todo: prove correctness
+
+  - todo: topological sort with "exists node with no inc. edges" and "DFS finishing times"

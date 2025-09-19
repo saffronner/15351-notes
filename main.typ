@@ -372,3 +372,26 @@
       - todo: prove correctness
 
   - todo: topological sort with "exists node with no inc. edges" and "DFS finishing times"
+
+- asymptotics
+
+  - we want a formal definition of alg. efficiency for large problems
+
+  - big $O$
+
+    - $T(n) in O(f(n))$ if $exists n_0 >= 0, c >= 0, T(n) <= c f(n) forall n >= n_0$
+
+    - "exists some $c$ linear multiplier such that $c f(n)$ dominates $T(n)$ after some $n_0$ large number."
+
+  - big $Omega$
+
+    - $T(n) in Omega(f(n))$ if $exists epsilon >= 0, n_0 >= 0, T(n) >= epsilon f(n) forall n >= n_0$
+
+    - "exists some $epsilon$ linear multiplier such that $epsilon f(n)$ is dominated by $T(n)$...
+    
+  - big $Theta$
+
+    $T(n) in Theta(f(n))$ if $T(n) in O(f(n)) and T(n) in Omega(f(n))$
+
+  - Theorem: $ exists c, lim_(n->infinity) T(n)/g(n) = c <==> T(n) in Theta(g(n)) $
+    and similarly for the other two big complexities.

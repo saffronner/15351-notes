@@ -1,8 +1,13 @@
 #import "@preview/fletcher:0.5.5" as fletcher: diagram, edge, node
+#import "@preview/booktabs:0.0.4": *
+#show: booktabs-default-table-style
 
 #set page(height: auto)
+// #set page(paper: "us-letter", numbering: "1/1")
 #set list(marker: [--])
 #let qed = [#math.square]
+
+// #show figure: it => []
 
 - an undirected graph is $G = (V,E)$, with $V$ the vertices, $E$ the edges. $V = {V_1, V_2, ..., V_n}$ is a set of objects, $E$ a set of connections between the objects s.t. $forall e in E, e = {u,v}$ with $u,v in V$.
 
@@ -396,6 +401,64 @@
 
     - proof: todo
 
+- shortest path problem
+  #figure(caption: [summary of options], table(
+    columns: 3,
+    align: (left, center, left),
+    toprule(),
+    // added by this package
+    table.header([Method], [Time Bound], [Notes]),
+    midrule(),
+    // added by this package
+    [D/BFS], $O(n + m)$, [unweighted only],
+    [Dijkstra], $O(m log n)$, [pos weights, source to all sinks],
+    [A\*], $O(m log n)$, [needs an $h$ (pref. admissable), source to one sink],
+    [Bellman-Ford], $O(n m)$, [can process negative weights],
+    bottomrule(),
+    // added by this package
+  ))
+
+  - as a note, running through these on paper is much better for comprehension than staring at the pseudocode
+
+  - Dijkstra
+
+    - use tree-growing paradigm, like Prim's
+
+      - think about what this paradigm means for neg weights: if I choose a locally good weight, I might miss out on globally good (very negative) weights.
+
+    - impl
+
+      - define one start node $s$, tentative distances $d$ (all $infinity$ except $d[s] = 0$), tentative parents $p$ all `None`, frontier $F = V$.
+      - while frontier has items
+        - $u$ = frontier node with min $d$
+        - remove $u$ from $F$ (this "locks $u$ in": its current $d$ is the shortest possible.)
+        - update $d$ for neighbors of $u$ if applicable
+
+    - proof
+
+      - really weird induction. todo.
+
+  - A\*
+
+    - impl
+
+      - literally just Dijkstra but with $h[u]$, a heuristic distance from $u$ to dest $t$
+      - that is, replace "min $d$" with "min $f = d + h$"
+
+    - an admissable $h$ is one that always underestimates (or is equal to) the real $u$ to $t$
+      - if $h$ admissable, A\* will find the globally optimal solution (proof omitted)
+
+  - Bellman-Ford
+
+    - as mentioned above, tree-growing (Dijk/A\*) doesn't work for negative weights. nor do they find (infinitely) negative weight cycles.
+
+    - revised problem statement: find that $exists$ negative cycle _or_ shortest path
+
+    - impl
+
+      - again, use $d[s] = 0,$ $d["else"] = infinity$
+      - relaxation (Ford) step: find any edge $(u,v)$ s.t. $d[v] > d[u] + w(u,v)$. update $d$ for that edge.
+      - relax until can't anymore. $d[u]$ must hold shortest paths.
 
 - asymptotics
 

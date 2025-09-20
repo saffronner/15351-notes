@@ -371,7 +371,31 @@
 
       - todo: prove correctness
 
-  - todo: topological sort with "exists node with no inc. edges" and "DFS finishing times"
+- topological sort problem: given a DAG, assign an "order" to the nodes (a bijective $f : V -> [n]$).
+
+  - Solution 1
+
+    - Theorem: every DAG has a node with no incoming edges
+      - think about it. what if there wasn't? then follow the edges backward. Since finite nodes in graph, eventually you return to already-seen: a cycle.
+
+    - thus:
+      ```
+      let i = 1
+      while i <= n:
+          find node u with no incoming
+          set f(u) = i
+          del u from graph
+          i++
+      ```
+
+    - proof: todo
+
+  - Solution 2
+
+    - do a DFS, track entering and leaving order. topological sort is the descending leaving number order.
+
+    - proof: todo
+
 
 - asymptotics
 

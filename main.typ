@@ -364,7 +364,7 @@
             edge(<4>, <3>)
             edge(<5>, <4>)
           },
-       )),
+        )),
       )
 
     - solution: do a BFS from any node, swapping colors per layer. check if any edge is monolayer (since edges are between adj layers or same layer)
@@ -412,7 +412,7 @@
     - $T(n) in Omega(f(n))$ if $exists epsilon >= 0, n_0 >= 0, T(n) >= epsilon f(n) forall n >= n_0$
 
     - "exists some $epsilon$ linear multiplier such that $epsilon f(n)$ is dominated by $T(n)$...
-    
+
   - big $Theta$
 
     $T(n) in Theta(f(n))$ if $T(n) in O(f(n)) and T(n) in Omega(f(n))$

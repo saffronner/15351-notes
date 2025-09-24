@@ -482,3 +482,53 @@
 
   - Theorem: $ exists c, lim_(n->infinity) T(n)/g(n) = c <==> T(n) in Theta(g(n)) $
     and similarly for the other two big complexities.
+
+- divide and conquer
+  - time complexity proofs
+    - set up with old friend recurrence relations
+    - tree Method
+    - by induction (used to verify a known/given time bound)
+      + show $T(k) < f(k)$ for "small" $k$
+      + assume $T(k) < f(k)$ for $k < n$
+      + show $T(n) in O(f(n))$ i.e. $T(n) <= f(n)$, large $n$, blah blah blah
+
+  - mergesort
+
+    - impl:
+      ```
+      sort(L)
+          if |L| == 2: return [min L, max L] in O(1)
+          else
+              L1 = sort(L[1 : |L|/2])
+              L2 = sort(L[|L|/2 : |L|])
+              ^ two calls to self on input length |L|/2
+              return merge(L1, L2) in O(n)
+      ```
+
+    - time complexity
+      - $T(n) = 2 T(n/2) + c dot n$
+      - Base case for $k=2$. $c 2 log 2 = 2c >= T(2)$
+      - Induct.
+        $
+          T(n) & <= 2 T(n/2) + c dot n "by defn" \
+               & <= 2 (c n/2 log n/2) + c dot n "by IH" \
+               & = c n log n - c n log_2 2 + c n "by alg" \
+               & = c n log n "by alg"
+        $
+        something something correct bounds of $O(n log n)$
+
+  - closest two points problem: given $n$ points in 2d space, find closest two
+    
+    - divide step: 
+      - divide points (e.g. left and right side).
+      - find closest in each side
+    - merge step:
+      - what if we cut the global closest distance?
+      - call the smaller "closest distance" $d$
+      - if that that global closest exists, it must at most $d$ away from our split, a "possible region"
+      - also, all pairs are at least $d$ away from each other (both sides)
+      - so, we just need to check all $O(n)$ points in the "possible region"
+      - for each point, there is a small finite ($15$ lol) number of points that might be able to be the global closest
+      - overall this means this merge step is $O(15n) in O(n)$
+
+    - this is $O(n log n)$ :D

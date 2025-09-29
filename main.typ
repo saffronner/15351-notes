@@ -532,3 +532,43 @@
       - overall this means this merge step is $O(15n) in O(n)$
 
     - this is $O(n log n)$ :D
+
+  - (binary) integer multiplication problem
+    - let's say we want $x dot y$, both $n$ bits long
+    - naïve is $Theta(n^2)$ in length of binary number
+    - we can get down to $Theta(n^(1.58...))$ with Karatsuba's Alg!
+
+      let $m = n/2$. then we can apply the "left shift" operation to write
+      $
+        x & = x_1 2^m + x_0 \
+        y & = y_1 2^m + y_0
+      $
+
+      Our multiplication becomes
+      $
+        x dot y & = (x_1 2^m + x_0) (y_1 2^m +y_0) \
+                & = x_1 y_1 2^(2m) + (x_1 y_0 + x_0 y_1)2^m + x_0 y_0
+      $
+
+      Notice the terms
+      $
+        P_0 & = x_0 y_0 \
+        P_1 & = x_1 y_1 \
+        P_2 & = x_1 y_0 + x_0 y_1 \
+            & = (x_1 + x_0)(y_1 + y_0) - P_0 - P_1
+      $
+
+      for a total of only three unique multiplications! And recall they are half as wide as $x dot y$. Our original multiplication becomes
+      $
+        x dot y = ... = P_1 2^(2m) + P_2 2^m + P_0
+      $
+
+      From this, we can write out our recurrence relation. Let $n$ be some $2^k$. Since we do those three multiplications on half the size, $T(2^k) = 3T(2^(k-1)) + c 2^k$.
+
+      The notes then do a lot of math nonsense. Surely the tree method is easier :(
+
+  - matmul problem
+    - naïve is $Theta(n^3)$ in (square) matrix side length
+    - with Strassen's alg, $Theta(n^2.807...)$
+
+      very similar of form to Karatuba's, using algebraic manipulations

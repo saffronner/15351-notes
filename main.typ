@@ -7,6 +7,33 @@
 #set list(marker: [--])
 #let qed = [#math.square]
 
+- note the chronological order of lecture content:
+  - Module 1 (Basics and Graphs)
+    - Week 1
+      - 01 -- Minimum Spanning Trees
+    - Week 2
+      - 02 -- Kruskal's Algorithm
+      - 03 -- Abstract Data Types and Union Find
+    - Week 3
+      - 04 -- Heaps
+      - 05 -- BFS & DFS
+      - 06 -- Graph Traversal Applications
+    - Week 4
+      - 07 -- Dijkstra
+      - 08 -- A\* Search
+      - 09 -- Bellman-Ford
+    - Week 5
+      - 10 -- Asymptotics
+      - 11 -- Divide & Conquer: Closest Points
+      - 12 -- Divide & Conquer: Karatsuba-Strassen
+  - Module 2 (Trees, Combinatorics, and Dynamic Programming)
+    - Week 6
+      - 13 -- Binary Search Trees
+      - 14 -- Averaged Analysis
+      - 15 -- Skip Lists
+      - 16 -- Splay Trees
+
+
 // #show figure: it => []
 
 - an undirected graph is $G = (V,E)$, with $V$ the vertices, $E$ the edges. $V = {V_1, V_2, ..., V_n}$ is a set of objects, $E$ a set of connections between the objects s.t. $forall e in E, e = {u,v}$ with $u,v in V$.
@@ -29,11 +56,14 @@
 
   - think about why $T$ must be a tree. if there are cycles, you can trivially rm an edge to cut costs
 
+  - to make proofs simpler below, we assume the weights are unique. Then, to prove for cases where weights can be the same, we can just add small unique values. Apparently.
+
   - MST Cycle Property: let a cycle $C$ be in $G$. the heaviest edge on the cycle $C$ is not in $G$'s MST.
 
   - MST Cut Property: let $S subset.eq V$, s.t. $1 <= |S| < |V|$, i.e. $S$ is not empty but not all nodes. Call a pair $(S, V without S)$ a cut of the graph. Every MST of $G$ contains the lightest edge on the cut (where an "edge on the cut" is some $e = {u, v}, u in S, v in V without S$).
 
   - Prim's alg
+    - tree growing paradigm
 
     - description
       - given graph $G$, choose arb node $s$, the start of $T$
@@ -55,9 +85,9 @@
           - `fn insert(item);`
           - `fn delete(item);`
 
-        - heap-ordered-tree (as an array) implementation
+        - heap-ordered tree (as an array) implementation
           #figure(
-            caption: [notice the monotonic decreasing upward. Also notice the array implementation, where $op("traverse_left")(i) = 2i$ and $op("traverse_right")(i) = 2i + 1$.],
+            caption: [a heaparray. Notice the monotonic decreasing upward. Also notice the array implementation, where $op("traverse_left")(i) = 2i$ and $op("traverse_right")(i) = 2i + 1$.],
             diagram(
               // debug: true,
               spacing: 0em, // small column gaps, large row spacing
@@ -195,7 +225,7 @@
             node((6, 7), [7], stroke: 1pt, shape: rect, width: 2em, height: 1.5em),
           ))
           - `new` $in O(n)$; creates the three lists
-          - `find` $in O(1)$; size array lookup
+          - `find` $in O(1)$; set array lookup
           - `union` $in O(log n)$ amortized;
             - procedure
               + find smaller set ($x<=y$)
@@ -205,7 +235,7 @@
             - proof
               - (2) is computation. others $O(1)$
               - after $k$ unions, $<= 2k$ items touched
-              - for any item $v$, `set[v]` is relabeled $<= log_2 2k$ times (TODO WTF WHY) ($2k$ is the \# of items in the largest set????)
+              - for any item $v$, `set[v]` is relabeled $<= log_2 2k$ times (TODO WHY) ($2k$ is the \# of items in the largest set????)
               - $2k log_2 2k in O(k log k)$ work
 
         - tree-based implementation
@@ -253,7 +283,7 @@
         - total runtime $in O(m log n + 2m log n + n) in O(m log n)$
 
 - graph traversal problem: suppose a graph $G = (V, E)$. Find a path from a node $s$ to $t$ if it exists.
-  - depth-first search
+  - depth-first search: $O(n + m)$
     #figure(caption: [depth-first search], diagram(
       // https://quiver.theophile.me/#r=typst&q=WzAsOCxbMCwwLCIxIl0sWzAsMSwiMiJdLFswLDIsIjMiXSxbMCwzLCI1Il0sWzAsNCwiNCJdLFsxLDQsIjYiXSxbMSwzLCI3Il0sWzIsNCwiOCJdLFswLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDQsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw1LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsNiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDcsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwyLCIiLDAseyJjdXJ2ZSI6LTMsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsxLDMsIiIsMCx7ImN1cnZlIjozLCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDQsIiIsMCx7ImN1cnZlIjo0LCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDcsIiIsMCx7ImN1cnZlIjotMywic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
       spacing: 1em,
@@ -281,7 +311,7 @@
     - theorem: adjacent edges are not on the same level. That is, if $(x,y) in E$, $x$ is either an ancestor or descendant of $y$.
       - proof: WLOG, let $x$ ancestor of $y$. When we pass $x$, we haven't seen $y$. All nodes between initially seeing $x$ and leaving $x$ are decendants of $x$. So, $y$ must have been explored before leaving $x$, as a descendant.
 
-  - breadth-first search
+  - breadth-first search: $O(n + m)$
     #figure(caption: [breadth-first search], diagram(
       // https://quiver.theophile.me/#r=typst&q=WzAsOCxbMSwwLCIxIl0sWzEsMSwiMiJdLFsyLDEsIjMiXSxbMCwyLCI0Il0sWzEsMiwiNSJdLFsxLDMsIjYiXSxbMiwyLCI3Il0sWzMsMiwiOCJdLFswLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDcsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw0LCIiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDIsIiIsMCx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMSwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
       spacing: 1em,
@@ -383,21 +413,26 @@
     - Theorem: every DAG has a node with no incoming edges
       - think about it. what if there wasn't? then follow the edges backward. Since finite nodes in graph, eventually you return to already-seen: a cycle.
 
-    - thus:
+    - impl/time:
+
+      initialize `num_incoming[w]` by counting edges with DFS in $O(n + m)$ and a "frontier" of $0$-incoming nodes.
+
       ```
-      let i = 1
-      while i <= n:
-          find node u with no incoming
+      for i in 1..=n:
+          find node u with no incoming (arb. in frontier)
           set f(u) = i
-          del u from graph
-          i++
+          del u from graph by updating its nbors' num_incoming and the frontier
       ```
+
+      the loop happens $n$ times. decrementing the neighbors' `num_incoming` happens $m$ times overall. total algo time is $O(n + m)$.
 
     - proof: todo
 
   - Solution 2
 
     - do a DFS, track entering and leaving order. topological sort is the descending leaving number order.
+
+    - this is clearly $O(n + m)$
 
     - proof: todo
 
@@ -423,7 +458,6 @@
   - Dijkstra
 
     - use tree-growing paradigm, like Prim's
-
       - think about what this paradigm means for neg weights: if I choose a locally good weight, I might miss out on globally good (very negative) weights.
 
     - impl
@@ -432,11 +466,21 @@
       - while frontier has items
         - $u$ = frontier node with min $d$
         - remove $u$ from $F$ (this "locks $u$ in": its current $d$ is the shortest possible.)
-        - update $d$ for neighbors of $u$ if applicable
+        - update $d$ for neighbors of $u$ where applicable
+
+    - runtime
+      - $O(m log n)$, like Prim's and co.
+      - create frontier as a heap in negligible time
+      - every edge processed once, either do nothing or reducekey in heap for the $log n$
 
     - proof
+      - we prove that after considering $n$ nodes, our tentative distances are perfect for those considered nodes
+      - notice the base case holds
+      - by induction,
+        - consider the next node be added with edge $(u,v)$
+        - let $P_v$ be the path chosen by Dijkstra (smallest to frontier)
+        - since the previously considered $k$ node distances were correct, adding the smallest from the frontier works because we only expose one level of new distance info, which is all we need. We can take the shortest path because the distances are never negative, so later levels can never be better than what we know of this single next level. See diagram in the lecture notes.
 
-      - really weird induction. todo.
 
   - A\*
 
@@ -444,6 +488,7 @@
 
       - literally just Dijkstra but with $h[u]$, a heuristic distance from $u$ to dest $t$
       - that is, replace "min $d$" with "min $f = d + h$"
+      - then, we can stop once we grow the dest $t$ into our tree
 
     - an admissable $h$ is one that always underestimates (or is equal to) the real $u$ to $t$
       - if $h$ admissable, A\* will find the globally optimal solution (proof omitted)
@@ -458,7 +503,8 @@
 
       - again, use $d[s] = 0,$ $d["else"] = infinity$
       - relaxation (Ford) step: find any edge $(u,v)$ s.t. $d[v] > d[u] + w(u,v)$. update $d$ for that edge.
-      - relax until can't anymore. $d[u]$ must hold shortest paths.
+      - relax until can't anymore. if no cycle, this happens at most $n-1$ times.
+      - if we relaxed $n$ times, there is a cycle (?)
 
 - asymptotics
 
@@ -486,11 +532,16 @@
 - divide and conquer
   - time complexity proofs
     - set up with old friend recurrence relations
+
     - tree Method
+
     - by induction (used to verify a known/given time bound)
-      + show $T(k) < f(k)$ for "small" $k$
-      + assume $T(k) < f(k)$ for $k < n$
+      + show $T(k) <= f(k)$ for "small" $k$
+      + assume $T(k) <= f(k)$ for $k < n$
       + show $T(n) in O(f(n))$ i.e. $T(n) <= f(n)$, large $n$, blah blah blah
+      - example: with $T(n) = 2T(n/2) + c n$, show $T(k) <= 2 c k log 2 k$ (i.e. $T(k) in O(k log k)$)
+        - base case ($k = 2$): $2 c log 2$ uhhhh what.
+
     - by Master Theorem
       - given a recurrence of form
         $
@@ -528,8 +579,8 @@
         something something correct bounds of $O(n log n)$
 
   - closest two points problem: given $n$ points in 2d space, find closest two
-    
-    - divide step: 
+
+    - divide step:
       - divide points (e.g. left and right side).
       - find closest in each side
     - merge step:

@@ -633,3 +633,78 @@
     - with Strassen's alg, $Theta(n^2.807...)$
 
       very similar of form to Karatuba's, using algebraic manipulations
+
+- amortized and average analysis
+
+  - skip lists
+    #figure(
+      caption: [a perfect skip list],
+      // https://quiver.theophile.me/#r=typst&q=WzAsMjcsWzAsMCwiLWluZmluaXR5Il0sWzEsMywiMSJdLFsyLDMsIjUiXSxbMiwyLCI1Il0sWzMsMywiOSJdLFs0LDMsIjE1Il0sWzUsMywiMjAiXSxbNiwzLCI1MCJdLFs3LDMsIjcyIl0sWzgsMywiOTkiXSxbOSwzLCIxMDUiXSxbMTAsMywiMjAwIl0sWzExLDMsIjIwMSJdLFsxMiwwLCJpbmZpbml0eSJdLFs0LDIsIjE1Il0sWzQsMSwiMTUgIl0sWzYsMiwiNTAiXSxbOCwyLCI5OSJdLFs4LDEsIjk5Il0sWzgsMCwiOTkiXSxbMTAsMiwiMjAwIl0sWzAsMywiLWluZmluaXR5Il0sWzAsMiwiLWluZmluaXR5Il0sWzEyLDIsImluZmluaXR5Il0sWzAsMSwiLWluZmluaXR5Il0sWzEyLDEsImluZmluaXR5Il0sWzEyLDMsImluZmluaXR5Il0sWzIxLDFdLFsxLDJdLFsyLDRdLFs0LDVdLFs1LDZdLFs2LDddLFs3LDhdLFs4LDldLFs5LDEwXSxbMTAsMTFdLFsxMSwxMl0sWzIyLDNdLFszLDE0XSxbMTQsMTZdLFsxNiwxN10sWzE3LDIwXSxbMjAsMjNdLFsyNCwxNV0sWzE1LDE4XSxbMTgsMjVdLFswLDE5XSxbMTksMTNdLFsxMiwyNl0sWzE5LDE4XSxbMTgsMTddLFsxNyw5XSxbMjAsMTFdLFsxNiw3XSxbMTUsMTRdLFsxNCw1XSxbMywyXV0=
+      diagram(spacing: 1em, {
+        node((0, 0), [$-infinity$])
+        node((1, 3), [$1$])
+        node((2, 3), [$5$])
+        node((2, 2), [$5$])
+        node((3, 3), [$9$])
+        node((4, 3), [$15$])
+        node((5, 3), [$20$])
+        node((6, 3), [$50$])
+        node((7, 3), [$72$])
+        node((8, 3), [$99$])
+        node((9, 3), [$105$])
+        node((10, 3), [$200$])
+        node((11, 3), [$201$])
+        node((12, 0), [$infinity$])
+        node((4, 2), [$15$])
+        node((4, 1), [$15$])
+        node((6, 2), [$50$])
+        node((8, 2), [$99$])
+        node((8, 1), [$99$])
+        node((8, 0), [$99$])
+        node((10, 2), [$200$])
+        node((0, 3), [$-infinity$])
+        node((0, 2), [$-infinity$])
+        node((12, 2), [$infinity$])
+        node((0, 1), [$-infinity$])
+        node((12, 1), [$infinity$])
+        node((12, 3), [$infinity$])
+        edge((0, 3), (1, 3), "->")
+        edge((1, 3), (2, 3), "->")
+        edge((2, 3), (3, 3), "->")
+        edge((3, 3), (4, 3), "->")
+        edge((4, 3), (5, 3), "->")
+        edge((5, 3), (6, 3), "->")
+        edge((6, 3), (7, 3), "->")
+        edge((7, 3), (8, 3), "->")
+        edge((8, 3), (9, 3), "->")
+        edge((9, 3), (10, 3), "->")
+        edge((10, 3), (11, 3), "->")
+        edge((0, 2), (2, 2), "->")
+        edge((2, 2), (4, 2), "->")
+        edge((4, 2), (6, 2), "->")
+        edge((6, 2), (8, 2), "->")
+        edge((8, 2), (10, 2), "->")
+        edge((10, 2), (12, 2), "->")
+        edge((0, 1), (4, 1), "->")
+        edge((4, 1), (8, 1), "->")
+        edge((8, 1), (12, 1), "->")
+        edge((0, 0), (8, 0), "->")
+        edge((8, 0), (12, 0), "->")
+        edge((11, 3), (12, 3), "->")
+        edge((8, 0), (8, 1), "->")
+        edge((8, 1), (8, 2), "->")
+        edge((8, 2), (8, 3), "->")
+        edge((10, 2), (10, 3), "->")
+        edge((6, 2), (6, 3), "->")
+        edge((4, 1), (4, 2), "->")
+        edge((4, 2), (4, 3), "->")
+        edge((2, 2), (2, 3), "->")
+      }),
+    )
+
+
+    - find and stuff by starting at the top list, finding which range it falls. Then go "down" when we reach the exact range (this is allowed because make keep downwards pointers as well.)
+
+    - when we specifically add a node, run above algorithm to determine where to add. then randomly "promote" it upward with Bernoulli dist ($0 => "promote another level", 1 => "stop"$)
+
+    - $O(log n )$ all operations or whatever. consider an arb. search, traced backwards. Averaging means half ops go "up," half go "left." Expected value turns out to be $O(log n)$ ops because getting to "top" is expected $2 log n$ total skips, and we get to start from the top in $O(1)$.

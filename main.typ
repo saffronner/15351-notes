@@ -116,7 +116,7 @@
       - work of Prim's with a heap is $O(m log n)$
         + $O(n)$; create empty heaparray (for max $n$ items)
         + $O(1)$; choose arb start node $u$
-        + $O(log n)$ work per heap operation, $O(m)$ times total (because we only nbors the edges that much, trust. see your example); $forall v in op(#raw("nbors")) (u),$ if $v$ is closer to $T$ than our saved distance from $v$ to $T$, update this distance (and also set parent of $v$ to $u$). With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`. TODO parent??
+        + $O(log n)$ work per heap operation, $O(m)$ times total (because we only nbors the edges that much, trust. see your example); $forall v in op(#raw("nbors")) (u),$ if $v$ is closer to $T$ than our saved distance from $v$ to $T$, update this distance (and also set parent of $v$ to $u$). With a heap, do `del(v); insert(v, d(u, v))` or just `decreaseKey(v, d(u, v))`. // parent is just what defines your output tree
         + $O(log n)$; set $u$ to closest node to $T$ (min of heap) and delete it
         + $O(n)$ repetitions; while $u$ exists, go to (3)
 

@@ -519,7 +519,7 @@
 
   - big $Omega$
 
-    - $T(n) in Omega(f(n))$ if $exists epsilon >= 0, n_0 >= 0, T(n) >= epsilon f(n) forall n >= n_0$
+    - $T(n) in Omega(f(n))$ if $exists n_0 >= 0, epsilon >= 0, T(n) >= epsilon f(n) forall n >= n_0$
 
     - "exists some $epsilon$ linear multiplier such that $epsilon f(n)$ is dominated by $T(n)$...
 

@@ -271,6 +271,7 @@
 
       - work of Kruskal's for array-based union-find is $O(m log n)$
         - sorting edges $in O(m log m) in O(m log n)$
+          - $m <= n^2 ==> log m <= log n^2  ==> log m <= 2 log n$
         - because $m <= n^2$, so $log m <= log n^2 = 2 log n$
         - at most $2m$ `find` operations $in O(2m)$ (to check if edge would create cycle)
         - at most $n-1$ `union` ops in $O(n log n)$

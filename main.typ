@@ -547,9 +547,9 @@
         $
           T(n) = a T(n/b) + Theta(n^i), a >= 1, b > 1
         $
-        - case 1: if $i < log_b a ("i.e." a > b^i) --> T(n) = Theta(n^(log_b a))$
-        - case 2: if $i = log_b a ("i.e." a = b^i) --> T(n) = Theta(n^i log n)$
-        - case 3: if $i > log_b a ("i.e." a < b^i) --> T(n) = Theta(n^i)$
+        - case 1: if $i < log_b a ("i.e." b^i < a) --> T(n) = Theta(n^(log_b a))$
+        - case 2: if $i = log_b a ("i.e." b^i = a) --> T(n) = Theta(n^i log n)$
+        - case 3: if $i > log_b a ("i.e." b^i > a) --> T(n) = Theta(n^i)$
       - think of it like "is the work at each leaf less, equal, or more than the work of splitting?" This decides what dominates.
       - unsimplified case 2 is $Theta(n^i log_b n)$ which matches the pattern better
 

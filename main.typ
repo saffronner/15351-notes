@@ -271,7 +271,7 @@
 
       - work of Kruskal's for array-based union-find is $O(m log n)$
         - sorting edges $in O(m log m) in O(m log n)$
-          - $m <= n^2 ==> log m <= log n^2  ==> log m <= 2 log n$
+          - $m <= n^2 ==> log m <= log n^2 ==> log m <= 2 log n$
         - because $m <= n^2$, so $log m <= log n^2 = 2 log n$
         - at most $2m$ `find` operations $in O(2m)$ (to check if edge would create cycle)
         - at most $n-1$ `union` ops in $O(n log n)$
@@ -709,3 +709,29 @@
     - when we specifically add a node, run above algorithm to determine where to add. then randomly "promote" it upward with Bernoulli dist ($0 => "promote another level", 1 => "stop"$)
 
     - $O(log n )$ all operations or whatever. consider an arb. search, traced backwards. Averaging means half ops go "up," half go "left." Expected value turns out to be $O(log n)$ ops because getting to "top" is expected $2 log n$ total skips, and we get to start from the top in $O(1)$.
+
+- TODO: something something splay trees and b trees
+
+
+- dictionary search problem: given a large, known, fixed text, make many search queries
+
+  - can be creative about problem. maybe we're finding sequence in DNA?
+
+  - a substring is a prefix of some suffix. What if we could search all suffixes?
+
+  - suffix trie
+
+    #figure(caption: [suffix trie for the string $a b a a b a$, terminator char $\$$])[#image("assets/suffix_trie.png", width: 50%)]
+
+    - characteristics
+      - paths down the trie for $S$, $S$`[1:]`, $S$`[2:]`, $...$
+      - (optional?) suffix link for $X "cons" alpha$ to $alpha$
+      - note how the terminator chars in the trie let me know where the string actually ends. this isn't useful in this problem statement yet, but it'll help for extending it.
+      - can collapse those long linked lists into a node with a string to make a suffix tree?
+
+    - solve questions like
+      - find substring
+      - find if $q$ is a suffix of $T$
+      - how many times $q$ is in $T$ (count num. leaves below $q$)
+      - longest repeated substring (deepest node with $>1$ child)
+      - suffixes in lexicographical order (DFS, expanding frontier via lex. smaller child)
